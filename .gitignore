@@ -1,0 +1,12 @@
+id_rsa*
+.env
+*.tfstate.backup
+*.tfvars
+.terraform/
+*.retry
+key.json
+join-command
+*.tfstate
+*.crt
+*.key
+*.tgz

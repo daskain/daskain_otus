@@ -1,7 +1,6 @@
 id_rsa*
 .env
 *.tfstate.backup
-*.tfvars
 .terraform/
 *.retry
 key.json

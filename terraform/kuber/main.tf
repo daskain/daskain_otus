@@ -85,7 +85,7 @@ resource "yandex_kubernetes_node_group" "k8s-yc-node" {
     }
 
     metadata = {
-      ssh-keys = "kuber:${file(var.public_key_path)}"
+      ssh-keys = "${file(var.iam_user)}:${file(var.public_key_path)}"
     }
   }
 
@@ -104,7 +104,7 @@ resource "yandex_kubernetes_node_group" "k8s-yc-node" {
   connection {
     type  = "ssh"
     host  = self.network_interface.0.nat_ip_address
-    user  = "kuber"
+    user  = var.iam_user
     agent = false
     # путь до приватного ключа
     private_key = file(var.private_key_path)

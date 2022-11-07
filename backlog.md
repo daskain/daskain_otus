@@ -10,3 +10,29 @@
  - terraform - папка с файлами для развертывания инстанса в Яндекс.Облаке
  - app - папка с файлами приложения
  - monitoring - папка с файлами для развертывания логирования и мониторинга приложения 
+
+# step-2
+## План
+ - [x] Докеризация приложения
+ - [x] Развернуть окружение для компонентов
+
+ ## Что сделано
+ Докеризировал приложение - ui и search
+
+ Окружение:
+
+ - Monga
+ ```
+ docker run -d --name mongodb -p 27017:27017 --network my-network  mongo:3.2
+ ```
+
+ - RabbitMQ
+ ```
+ docker run -d -p 8080:15672 --hostname my-rabbit --name my-rabbit -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password --network my-network rabbitmq:3-management
+
+ ```
+
+# step-3
+## План
+ - [ ] Подружить приложение с кубером
+ - [ ] Попробовать мониторинг

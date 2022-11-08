@@ -1,0 +1,15 @@
+---
+service:
+  internalPort: 8000
+  externalPort: 8000
+  replicas: 1
+
+image:
+  repository: daskain/crawler-ui
+  tag: 0.2
+
+mongoHost: 51.250.92.188
+mongoPort: 27017
+
+ingress:
+  class: nginx

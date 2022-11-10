@@ -1,6 +1,6 @@
 ---
 - name: Check && install python
-  hosts: mongodb
+  hosts: all
   become: true
   gather_facts: False
 

@@ -6,9 +6,9 @@ service:
 
 image:
   repository: daskain/crawler-ui
-  tag: 0.2
+  tag: 0.3
 
-mongoHost: 51.250.92.188
+mongoHost: 51.250.13.202
 mongoPort: 27017
 
 ingress:

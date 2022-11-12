@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "crawler.fullname" . }}
+  labels:
+    app: crawler-app
+    component: crawler
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.service.replicas }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: crawler-app
+      component: crawler
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      name: crawler
+      labels:
+        app: crawler-app
+        component: crawler
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        name: crawler
+        ports:
+        - containerPort: {{ .Values.service.internalPort }}
+          name: crawler
+          protocol: TCP
+        env:
+        - name: MONGO
+          value: {{  .Values.mongo.mongoHost | default (printf "%s-mongo" .Release.Name) }}
+        - name: MONGO_PORT
+          value: {{  .Values.mongo.mongoPort | default "27017" | quote }}
+        - name: RMQ_HOST
+          value: {{  .Values.rabbit.rmqHost }}
+        - name: RMQ_QUEUE
+          value: {{  .Values.rabbit.rmqQueue }}
+        - name: RMQ_USERNAME
+          value: {{  .Values.rabbit.rmqUser }}
+        - name: RMQ_PASSWORD
+          value: {{  .Values.rabbit.rmqPassword }}
+        - name: CHECK_INTERVAL
+          value: {{  .Values.rabbit.interval | default "30" | quote }}
+        - name: EXCLUDE_URLS
+          value: {{  .Values.config.excludeURL }}
+        - name: URL
+          value: {{  .Values.config.url }}
+        - name: ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace

@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "crawler.fullname" . }}
+  labels:
+    app: crawler-app
+    component: crawler
+    release: {{ .Release.Name }}
+spec:
+  type: NodePort
+  ports:
+  - port: {{ .Values.global.crawler.service.externalPort }}
+    protocol: TCP
+    targetPort: {{ .Values.global.crawler.service.internalPort }}
+  selector:
+    app: crawler-app
+    component: crawler
+    release: {{ .Release.Name }}

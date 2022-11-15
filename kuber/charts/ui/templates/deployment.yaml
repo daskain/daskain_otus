@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "ui.fullname" . }}
+  labels:
+    app: crawler-app
+    component: ui
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.global.ui.service.replicas }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: crawler-app
+      component: ui
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      name: ui
+      labels:
+        app: crawler-app
+        component: ui
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - image: "{{ .Values.global.ui.image.repository }}:{{ .Values.global.ui.image.tag }}"
+        name: ui
+        ports:
+        - containerPort: {{ .Values.global.ui.service.internalPort }}
+          name: ui
+          protocol: TCP
+        env:
+        - name: MONGO
+          value: {{  .Values.global.config.mongo.mongoHost | default (printf "%s-mongo" .Release.Name) }}
+        - name: MONGO_PORT
+          value: {{  .Values.global.config.mongo.mongoPort | default "27017" | quote }}
+        - name: ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace

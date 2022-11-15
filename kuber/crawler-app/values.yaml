@@ -1,0 +1,35 @@
+---
+global:
+  ui: 
+    service:
+      internalPort: 8000
+      externalPort: 8000
+      replicas: 1
+    image:
+      repository: daskain/crawler-ui
+      tag: latest
+
+  crawler:
+    service:
+      internalPort: 8000
+      externalPort: 8000
+      replicas: 1
+    image:
+      repository: daskain/crawler-search
+      tag: latest
+    env:
+      excludeURL: .*github.com
+      url: https://vitkhab.github.io/search_engine_test_site/
+
+  config:
+    mongo:
+      mongoHost: 158.160.35.1
+      mongoPort: 27017
+    ingress:
+      class: nginx
+    rabbit:
+      rmqHost: 158.160.38.137
+      rmqUser: user
+      rmqPassword: pass
+      rmqQueue: rabbitmq_queue
+      interval: 60

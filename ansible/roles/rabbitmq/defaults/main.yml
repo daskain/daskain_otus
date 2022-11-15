@@ -1,0 +1,22 @@
+---
+# Plugins to enabled
+rabbitmq_plugins:
+  - rabbitmq_management
+
+# VHOST
+rabbitmq_vhosts: []
+rabbitmq_users:
+  - user:     admin
+    password: admin             # Optional, defaults to ""
+    tags:                           # Optional, user tags
+    - administrator
+  - user:     user
+    password: pass             # Optional, defaults to ""
+
+rabbitmq_policies: []
+
+# rabbitmq TCP configuration
+rabbitmq_tcp_address: 0.0.0.0
+rabbitmq_tcp_port: 5672
+rabbitmq_cluster: False
+rabbitmq_erlang_cookie: 'THISISACOOKIEMONSTER'

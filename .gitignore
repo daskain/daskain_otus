@@ -9,4 +9,4 @@ join-command
 *.crt
 *.key
 *.tgz
-tmp/
+tmp*

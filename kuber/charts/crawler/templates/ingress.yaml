@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "crawler.fullname" . }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.global.config.ingress.class }}
+    nginx.ingress.kubernetes.io/rewrite-target: "/"
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/{{ .Release.Name }}/{{ .Chart.Name }}"
+        backend:
+          service:
+            name: {{ template "crawler.fullname" . }}
+            port:
+              number: {{ .Values.global.crawler.service.externalPort }}

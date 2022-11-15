@@ -9,14 +9,14 @@ image:
   tag: 0.3
 
 mongo:
-  mongoHost: 51.250.13.202
+  mongoHost: 158.160.35.1
   mongoPort: 27017
 
 ingress:
   class: nginx
 
 rabbit:
-  rmqHost: 51.250.86.215
+  rmqHost: 158.160.38.137
   rmqUser: user
   rmqPassword: pass
   rmqQueue: rabbitmq_queue

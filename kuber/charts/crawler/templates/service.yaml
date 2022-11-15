@@ -8,11 +8,11 @@ metadata:
     component: crawler
     release: {{ .Release.Name }}
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
-  - port: {{ .Values.service.externalPort }}
+  - port: {{ .Values.global.crawler.service.externalPort }}
     protocol: TCP
-    targetPort: {{ .Values.service.internalPort }}
+    targetPort: {{ .Values.global.crawler.service.internalPort }}
   selector:
     app: crawler-app
     component: crawler

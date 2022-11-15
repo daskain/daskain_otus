@@ -1,0 +1,3 @@
+rabbitmq_conf_env:
+  RABBITMQ_DEFAULT_USER: user
+  RABBITMQ_DEFAULT_PASS: pass

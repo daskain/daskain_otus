@@ -1,0 +1,9 @@
+dependencies:
+- name: ui
+  repository: file://../charts/ui
+  version: "1"
+- name: crawler
+  repository: file://../charts/crawler
+  version: "1"
+digest: sha256:a3adafbe9e12ed6e0a1e1ca62ef0dc6f2cf2242d5c3613079b62f0c8fddb0566
+generated: "2022-11-15T14:21:48.660340765+03:00"

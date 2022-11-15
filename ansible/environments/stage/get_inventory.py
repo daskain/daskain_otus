@@ -29,7 +29,7 @@ class Inventory(object):
 
 
     def get_inventori(self):
-        return subprocess.getoutput('yc compute instances list --format json')
+        return subprocess.getoutput('yc compute instances list --format json --folder-name infra --cloud-id b1galktnqd8s8ij5diff')
 
     def build_dyn_inventory(self):
 

@@ -8,7 +8,7 @@ metadata:
     component: crawler
     release: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.service.replicas }}
+  replicas: {{ .Values.global.crawler.service.replicas }}
   strategy:
     type: Recreate
   selector:
@@ -25,31 +25,31 @@ spec:
         release: {{ .Release.Name }}
     spec:
       containers:
-      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+      - image: "{{ .Values.global.crawler.image.repository }}:{{ .Values.global.crawler.image.tag }}"
         name: crawler
         ports:
-        - containerPort: {{ .Values.service.internalPort }}
+        - containerPort: {{ .Values.global.crawler.service.internalPort }}
           name: crawler
           protocol: TCP
         env:
         - name: MONGO
-          value: {{  .Values.mongo.mongoHost | default (printf "%s-mongo" .Release.Name) }}
+          value: {{  .Values.global.config.mongo.mongoHost | default (printf "%s-mongo" .Release.Name) }}
         - name: MONGO_PORT
-          value: {{  .Values.mongo.mongoPort | default "27017" | quote }}
+          value: {{  .Values.global.config.mongo.mongoPort | default "27017" | quote }}
         - name: RMQ_HOST
-          value: {{  .Values.rabbit.rmqHost }}
+          value: {{  .Values.global.config.rabbit.rmqHost }}
         - name: RMQ_QUEUE
-          value: {{  .Values.rabbit.rmqQueue }}
+          value: {{  .Values.global.config.rabbit.rmqQueue }}
         - name: RMQ_USERNAME
-          value: {{  .Values.rabbit.rmqUser }}
+          value: {{  .Values.global.config.rabbit.rmqUser }}
         - name: RMQ_PASSWORD
-          value: {{  .Values.rabbit.rmqPassword }}
+          value: {{  .Values.global.config.rabbit.rmqPassword }}
         - name: CHECK_INTERVAL
-          value: {{  .Values.rabbit.interval | default "30" | quote }}
+          value: {{  .Values.global.config.rabbit.interval | default "30" | quote }}
         - name: EXCLUDE_URLS
-          value: {{  .Values.config.excludeURL }}
+          value: {{  .Values.global.crawler.env.excludeURL }}
         - name: URL
-          value: {{  .Values.config.url }}
+          value: {{  .Values.global.crawler.env.url }}
         - name: ENV
           valueFrom:
             fieldRef:

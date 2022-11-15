@@ -8,8 +8,9 @@ image:
   repository: daskain/crawler-ui
   tag: 0.3
 
-mongoHost: 51.250.13.202
-mongoPort: 27017
+mongo:
+  mongoHost: 158.160.35.1
+  mongoPort: 27017
 
 ingress:
   class: nginx

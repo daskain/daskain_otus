@@ -1,0 +1,22 @@
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ GITLAB_ROOT }}/config"
+    - "{{ GITLAB_ROOT }}/data"
+    - "{{ GITLAB_ROOT }}/logs"
+
+- name: Generate compose.yml
+  template:
+    src: compose.yml.j2
+    dest: "{{ GITLAB_ROOT }}/docker-compose.yml"
+
+- name: Create and start gitlab
+  docker_compose:
+    project_src: "{{ GITLAB_ROOT }}"
+    build: false
+  register: output
+
+- debug:
+    var: output

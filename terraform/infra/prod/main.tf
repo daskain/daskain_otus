@@ -34,10 +34,3 @@ module "gitlab" {
   private_key_path = var.private_key_path
   subnet_id        = var.subnet_id
 }
-
-resource "null_resource" "configure-k8s" {
-  provisioner "local-exec" {
-      command = "echo '${module.gitlab.external_ip_address_gitlab}   gitlab.otus.exp' | sed \"s/\\b\\([0-9]\\{1,3\\}\\.\\)\\{1,3\\}[0-9]\\{1,3\\}\\b/$IP/g\""
-    }
-}
-

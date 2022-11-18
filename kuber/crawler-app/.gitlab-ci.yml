@@ -1,0 +1,17 @@
+stages:
+  - test
+  - build
+  - deploy
+  - prod
+  - preprod
+
+Test for UI:
+  stage: test
+  
+
+Deploy to preprod:
+  stage: preprod
+  image: alpine/helm:3.2.1
+  script:
+    - PROJECT_NAME="${CI_PROJECT_NAME}-preprod"
+    - helm upgrade ${PROJECT_NAME} -i ./ -f values.preprod.env.yaml

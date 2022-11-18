@@ -20,4 +20,4 @@ ENV CHECK_INTERVAL chk_interval
 ENV EXCLUDE_URLS exclude_urls
 ENV URL url
 
-CMD ["python", "-u", "crawler/crawler.py", "$URL"]
+CMD ["sh", "-c", "python -u crawler/crawler.py ${URL}"]

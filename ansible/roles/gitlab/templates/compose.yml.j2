@@ -4,7 +4,7 @@ web:
   hostname: 'localhost'
   environment:
     GITLAB_OMNIBUS_CONFIG:
-      external_url 'http://{{ ansible_host }}'
+      external_url 'http://{{ ansible_host }}';
   ports:
     - '80:80'
     - '443:443'

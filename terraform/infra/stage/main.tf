@@ -14,6 +14,13 @@ provider "yandex" {
   zone                     = var.zone
 }
 
+module "gitlab" {
+  source           = "../modules/gitlab"
+  public_key_path  = var.public_key_path
+  private_key_path = var.private_key_path
+  subnet_id        = var.subnet_id
+}
+
 module "rabbitmq" {
   source           = "../modules/rabbitmq"
   public_key_path  = var.public_key_path
@@ -23,13 +30,6 @@ module "rabbitmq" {
 
 module "mongodb" {
   source           = "../modules/mongodb"
-  public_key_path  = var.public_key_path
-  private_key_path = var.private_key_path
-  subnet_id        = var.subnet_id
-}
-
-module "gitlab" {
-  source           = "../modules/gitlab"
   public_key_path  = var.public_key_path
   private_key_path = var.private_key_path
   subnet_id        = var.subnet_id

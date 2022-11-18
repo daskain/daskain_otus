@@ -1,0 +1,18 @@
+---
+imagePullPolicy: IfNotPresent
+gitlabUrl:  "http://62.84.118.127/"
+runnerRegistrationToken: "GR1348941WVscQkSXUvaQh4kro2a3"
+terminationGracePeriodSeconds: 3600
+concurrent: 10
+checkInterval: 30
+sessionServer:
+ enabled: false
+rbac:
+  create: true
+runners:
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        namespace = "{{.Release.Namespace}}"
+        image = "ubuntu:20.04"
+        privileged = true

@@ -18,17 +18,17 @@ global:
       repository: daskain/crawler-search
       tag: latest
     env:
-      excludeURL: .*github.com
-      url: https://vitkhab.github.io/search_engine_test_site/
+      excludeURL: '.*github.com'
+      url: 'https://vitkhab.github.io/search_engine_test_site/'
 
   config:
     mongo:
-      mongoHost: 158.160.35.1
+      mongoHost: 158.160.41.222
       mongoPort: 27017
     ingress:
       class: nginx
     rabbit:
-      rmqHost: 158.160.38.137
+      rmqHost: 158.160.43.51
       rmqUser: user
       rmqPassword: pass
       rmqQueue: rabbitmq_queue

@@ -1,3 +1,5 @@
 ---
 # defaults file for gitlab
 GITLAB_ROOT: "/srv/gitlab"
+GITLAB_ROOT_EMAIL: "root@local"
+GITLAB_ROOT_PASSWORD: "qwerty" 

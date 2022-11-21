@@ -6,4 +6,5 @@
 
 - include: prepare_host.yml
 - include: install_docker.yml
+- include: copy_config.yml 
 - include: start_gitlab.yml

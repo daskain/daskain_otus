@@ -9,7 +9,7 @@ RUN cd search_engine_ui/
 WORKDIR /search_engine_ui
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt -r requirements-test.txt
 ENV MONGO mongodb
 ENV MONGO_PORT mongo_port
 

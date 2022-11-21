@@ -3,10 +3,14 @@
   hosts: all
   become: true
   gather_facts: False
+  pre_tasks:
+    - setup:
+      register: setup_status
+      until: setup_status is success
+      delay: 10
+      retries: 30
 
   tasks:
     - name: Install python for Ansible
       raw: test -e /usr/bin/python || (apt -y update && apt install -y python)
       changed_when: False
-      retries: 3
-      delay: 3

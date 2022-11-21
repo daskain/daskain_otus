@@ -1,7 +1,7 @@
 ---
 imagePullPolicy: IfNotPresent
-gitlabUrl:  "http://62.84.124.240//"
-runnerRegistrationToken: "GR1348941ydX4P3pxTGrXWs7htkqq"
+gitlabUrl:  "http://62.84.117.255/"
+runnerRegistrationToken: "GR13489412i4S7AZ2AGtXG5kyTmsJ"
 terminationGracePeriodSeconds: 3600
 concurrent: 10
 checkInterval: 30

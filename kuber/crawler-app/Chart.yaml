@@ -1,0 +1,7 @@
+apiVersion: v1
+name: crawler-app
+version: 1.0
+description: App for otus
+maintainers: 
+  - name: Kutcher Sergey
+    email: s.kutcher@ya.ru

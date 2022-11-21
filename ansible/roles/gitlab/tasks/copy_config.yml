@@ -1,0 +1,6 @@
+- name: Copy config k8s local to remote
+  ansible.builtin.copy:
+    src: ~/.kube/config 
+    dest: "{{ GITLAB_ROOT }}/config/"
+    directory_mode: yes
+

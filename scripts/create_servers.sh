@@ -22,7 +22,7 @@ cd $(echo $PROJECT_FOLDER/terraform/infra/prod/)
 terraform init 
 terraform apply --auto-approve
 
-sleep 10s
+# sleep 10s
 
 echo "Install env to infra"
 cd $(echo $PROJECT_FOLDER/ansible)

@@ -1,0 +1,62 @@
+services:
+  my-mongodb:
+    image: mongo:3.2
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    # volumes:
+      # # seeding scripts
+      # - ./mongo-entrypoint:/docker-entrypoint-initdb.d
+      # # named volumes
+      # - mongodb:/data/db
+      # - mongoconfig:/data/configdb
+    networks:
+      - my-network
+
+  rabbitmq:
+    # There is a prebuilt RabbitMQ image; see
+    # https://hub.docker.com/_/rabbitmq/ for details.
+    # This variant is built on Alpine Linux (it's smallerdocker logs) and includes
+    # the management UI.
+    image: 'rabbitmq:3.6-management-alpine'
+    container_name: rabbitmq
+
+    # These ports are exposed on the host; 'hostport:containerport'.
+    # You could connect to this server from outside with the *host's*
+    # DNS name or IP address and port 5672 (the left-hand side of the
+    # colon).
+    ports:
+      # The standard AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+
+    networks:
+      - my-network
+
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=pass
+
+  crawler-search:
+    image: "daskain/crawler-search:latest"
+    container_name: crawler-search
+    networks:
+      - my-network
+    ports: 
+      - '8010:8000'
+    env_file:
+      - .env.compose.example
+    
+# volumes:
+#   # default dir on Ubuntu: /var/lib/docker/volumes
+#   mongodb:
+#   mongoconfig:
+
+networks:
+  my-network:
+    driver: bridge

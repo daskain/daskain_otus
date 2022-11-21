@@ -1,7 +1,2 @@
 ---
 # handlers file for gitlab
-- name: show password
-  community.docker.docker_container_exec:
-    container: gitlab_web_1
-    command: grep 'Password:' /etc/gitlab/initial_root_password
-  register: result

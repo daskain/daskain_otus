@@ -17,6 +17,9 @@ helm upgrade --namespace default gitlab-runner -f values.yaml gitlab/gitlab-runn
 echo "Create monitoring"
 kubectl create namespace monitoring
 
+echo "Create logging"
+kubectl create namespace logging
+
 #GET token
 token=$(kubectl -n kube-system get secrets -o json | \
 jq -r '.items[] | select(.metadata.name | startswith("gitlab-admin")) | .data.token' | \

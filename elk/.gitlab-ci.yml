@@ -1,0 +1,41 @@
+---
+stages:
+  - elastic
+  - fluentd
+  - kibana
+
+install elastic:
+  stage: elastic
+  tags: [log]
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n ${KUBE_CONFIG} > $HOME/.kube/config
+    - kubectl replace --force -f ./elastic
+
+install fluentd:
+  stage: fluentd
+  tags: [log]
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n ${KUBE_CONFIG} > $HOME/.kube/config
+    - kubectl replace --force -f ./fluentd
+
+install kibana:
+  stage: kibana
+  tags: [log]
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n ${KUBE_CONFIG} > $HOME/.kube/config
+    - kubectl replace --force -f ./kibana

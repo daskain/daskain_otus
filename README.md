@@ -56,6 +56,9 @@
 ### Gitlab
 Управление жизненным циклом приложения реализованно в Gitlab. 
 
+### Стэк ELK
+Логирование выполнено стеком ELK. Сервис устанавливается в кластер кубера.
+
 ## Установка
 ### Инфраструктура
 #### Переменные
@@ -135,10 +138,13 @@ $~/daskain_otus/scripts/prepare_k8s.sh
 
     #Создание пространства имен monitoring
     $kubectl create namespace monitoring
+
+    #Создание пространства имен logging
+    $kubectl create namespace logging
     ```
 
 После подгтовки, можно заняться приложением:
  - Создать проект crawler-app и monitoring
- - Запушить содержимое папок ./monitoring и ./kuber/crawler-app в гитлаб
+ - Запушить содержимое папок ./monitoring, ./elk и ./kuber/crawler-app в гитлаб
 
 Проверить работоспособность

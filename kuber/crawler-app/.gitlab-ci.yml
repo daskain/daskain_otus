@@ -31,7 +31,7 @@ build STAGE:
   tags: [stage]
   image: alpine/helm:3.2.1
   script:
-    - helm upgrade ${STAGE_RELEASE} -i ./ -f values.stage.env.yaml
+    - helm upgrade ${STAGE_RELEASE} -i ./ -f ./values/values.stage.env.yaml
 
 prepare env STAGE:
   stage: prepare stage
@@ -85,7 +85,7 @@ build PROD:
   tags: [prod]
   image: alpine/helm:3.2.1
   script:
-    - helm upgrade ${PROD_RELEASE} -i ./ -f values.prod.env.yaml
+    - helm upgrade ${PROD_RELEASE} -i ./ -f ./values/values.prod.env.yaml
 
 prepare env PROD: 
   stage: prepare prod

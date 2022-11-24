@@ -143,7 +143,7 @@ $~/daskain_otus/scripts/prepare_k8s.sh
     ```
 
 После подгтовки, можно заняться приложением:
- - Создать проект crawler-app и monitoring
+ - Создать проект crawler-app, elk и monitoring
  - Запушить содержимое папок ./monitoring, ./elk и ./kuber/crawler-app в гитлаб
 
 Проверить работоспособность

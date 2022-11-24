@@ -1,0 +1,8 @@
+prometheus:
+  service:
+    type: LoadBalancer
+
+  prometheusSpec:
+    serviceMonitorSelector: 
+      matchLabels:
+        prometheus: prometheus

@@ -1,0 +1,12 @@
+---
+rabbitmq:
+  url: http://158.160.46.113:15672
+  user: user
+  password: pass
+
+prometheus:
+  monitor:
+    enabled: true
+    additionalLabels:
+      prometheus: prometheus
+    interval: 15s

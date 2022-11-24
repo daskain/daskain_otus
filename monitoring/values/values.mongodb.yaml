@@ -1,0 +1,8 @@
+---
+mongodb:
+  uri: mongodb://158.160.43.138:27017?replicaSet=replicaset
+
+serviceMonitor:
+  enabled: true
+  additionalLabels:
+    prometheus: prometheus

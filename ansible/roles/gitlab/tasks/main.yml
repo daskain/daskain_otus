@@ -1,0 +1,10 @@
+---
+# tasks file for gitlab
+- name: Show info about the env this host belongs to
+  debug:
+    msg: "This host is in {{ env }} environment!!!"
+
+- include: prepare_host.yml
+- include: install_docker.yml
+- include: copy_config.yml 
+- include: start_gitlab.yml

@@ -110,5 +110,5 @@ resource "yandex_kubernetes_node_group" "k8s-yc-node" {
     private_key = file(var.private_key_path)
   }
 
-
 }
+

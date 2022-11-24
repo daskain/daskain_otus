@@ -10,7 +10,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: {{ .Values.global.crawler.service.externalPort }}
+  - name: crawler
+    port: {{ .Values.global.crawler.service.externalPort }}
     protocol: TCP
     targetPort: {{ .Values.global.crawler.service.internalPort }}
   selector:

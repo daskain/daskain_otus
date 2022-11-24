@@ -92,5 +92,61 @@ crawler-app-5   default         1               2022-11-15 14:19:45.272737804 +0
 
 # step-4
 ## План
- - [ ] Настроить мониторинг
- - [ ] Интегрировать gitlab
+ - [х] Доработка развертывания
+ - [x] Интегрировать c gitlab
+ - [x] Настроить мониторинг
+
+
+## Что сделано
+### Доработка развертывания
+Добавлен +1 хост для гитлаба. Создание всеx серверов и их удаление теперь осуществляется скриптами create_servers.sh и destroy_servers.sh:
+```
+$tree scripts/
+scripts/
+├── create_servers.sh
+├── destroy_servers.sh
+└── prepare_k8s.sh
+
+0 directories, 3 files
+```
+После подготовки серверов и кластера K8S, необходимо подготовить Gitlab (раннеры, проекты и группы):
+ - Зайти на хост Gitlab, ввести креды
+ - Создать группу
+ - Взять токен для раннера
+ - Создать проект crawler-app и monitoring
+ - Запушить содержимое папок ./monitoring и ./kuber/crawler-app в гитлаб
+
+Токена и адрес хоста Gitlab необходимо добавить в файл ./kuber/manifests/values.yaml. После чего запустить скрипт:
+```
+$./scripts/prepare_k8s.sh 
+```
+Раннер добавится в gitlab, где его надо будет настроить на работу с тегами (в пайпе приложения добавлены теги)
+
+### Интегрировать c gitlab
+Для развертывания проектов используется gitlab pipeline. Реализовано несколько стадий, работа с разными средами (условно, т.к. по сути они смотрят на те-же сервера Mongo/RabbitMQ)
+
+### Мониторинг
+Мониторинг реализован через chart prometheus-community/kube-prometheus-stack.
+Grafana и Prometheus доступны через LoadBalance:
+```
+$kubectl get svc -n monitoring
+NAME                                      TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                      AGE
+alertmanager-operated                     ClusterIP      None            <none>           9093/TCP,9094/TCP,9094/UDP   91m
+prometheus-operated                       ClusterIP      None            <none>           9090/TCP                     91m
+stable-grafana                            LoadBalancer   10.96.194.57    51.250.79.93     80:30872/TCP                 91m
+stable-kube-prometheus-sta-alertmanager   ClusterIP      10.96.128.25    <none>           9093/TCP                     91m
+stable-kube-prometheus-sta-operator       ClusterIP      10.96.180.72    <none>           443/TCP                      91m
+stable-kube-prometheus-sta-prometheus     LoadBalancer   10.96.211.143   158.160.38.195   9090:32425/TCP               91m
+stable-kube-state-metrics                 ClusterIP      10.96.138.96    <none>           8080/TCP                     91m
+stable-prometheus-node-exporter           ClusterIP      10.96.219.206   <none>           9100/TCP                     91m
+```
+Креды для Grafana:
+```
+UserName: admin
+Password: prom-operator
+```
+
+# step-5
+## План
+ - [ ] Добавить логирование ELK
+ - [ ] Подготовить проект к защите

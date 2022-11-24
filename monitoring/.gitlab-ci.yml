@@ -1,0 +1,28 @@
+---
+stages:
+  - build
+  - expose
+
+install prometheus:
+  stage: build
+  image: alpine/helm:3.2.1
+  script:
+    - helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    - helm repo add stable https://charts.helm.sh/stable
+    - helm repo update
+    - helm upgrade -i stable prometheus-community/kube-prometheus-stack -n monitoring
+
+expose stack:
+  stage: expose
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n ${KUBE_CONFIG} > $HOME/.kube/config
+    - > 
+      kubectl patch svc stable-kube-prometheus-sta-prometheus -p '{"spec": {"type": "LoadBalancer"}}' -n monitoring
+    - >
+      kubectl patch svc stable-grafana  -p '{"spec": {"type": "LoadBalancer"}}' -n monitoring
+    - kubectl get svc -n monitoring

@@ -1,0 +1,134 @@
+---
+variables:
+  KUBE_CONFIG: ${echo /etc/gitlab/config}
+  STAGE_RELEASE: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-stage
+  PROD_RELEASE: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-prod
+
+stages:
+  - monitor
+  - stage
+  - prepare stage
+  - check stage
+  - prepare prod
+  - prod
+  - check prod
+
+config monitor:
+  stage: monitor
+  tags: [monitor]
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n ${KUBE_CONFIG} > $HOME/.kube/config
+    - kubectl apply -f monitoring/
+
+# Stage deploy
+build STAGE:
+  stage: stage
+  tags: [stage]
+  image: alpine/helm:3.2.1
+  script:
+    - helm upgrade ${STAGE_RELEASE} -i ./ -f values.stage.env.yaml
+
+prepare env STAGE:
+  stage: prepare stage
+  tags: [stage]
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n ${KUBE_CONFIG} > $HOME/.kube/config
+    - kubectl get pods
+    - STAGE_IP=$(kubectl get ingress -o jsonpath={.items[0].status.loadBalancer.ingress[].ip})
+    - echo "STAGE_IP=$STAGE_IP" >> init.env
+    - echo $STAGE_IP
+  artifacts:
+    reports:
+      dotenv: init.env
+  
+sanity ui STAGE:
+  dependencies:
+    - prepare env STAGE
+  variables:
+    URL_UI: $STAGE_IP/$STAGE_RELEASE/ui
+  image: curlimages/curl
+  stage: check stage
+  tags: [stage]
+  script:
+    - echo $STAGE_IP
+    - >
+      curl -i ${URL_UI}/ | grep "HTTP/1.1 200 OK" && 
+      ( echo Helth Check OK = $URL_UI && exit 0; ) || ( echo Helth Check Failed Actuator=$URL_UI && exit 2; ) 
+
+sanity crawler STAGE:
+  dependencies:
+    - prepare env STAGE
+  variables:
+    URL_CRAWLER: $STAGE_IP/$STAGE_RELEASE/crawler
+  image: curlimages/curl
+  stage: check stage
+  tags: [stage]
+  script:
+    - echo $STAGE_IP
+    - >
+      curl -i ${URL_CRAWLER} | grep "HTTP/1.1 200 OK" && 
+      ( echo Helth Check OK = $URL_CRAWLER && exit 0; ) || ( echo Helth Check Failed Actuator=$URL_CRAWLER && exit 2; )
+
+#prod deploy
+build PROD:
+  stage: prod
+  tags: [prod]
+  image: alpine/helm:3.2.1
+  script:
+    - helm upgrade ${PROD_RELEASE} -i ./ -f values.prod.env.yaml
+
+prepare env PROD: 
+  stage: prepare prod
+  tags: [prod]
+  image: alpine:3.7
+  script:
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p $HOME/.kube
+    - echo -n ${KUBE_CONFIG} > $HOME/.kube/config
+    - kubectl get pods
+    - PROD_IP=$(kubectl get ingress -o jsonpath={.items[0].status.loadBalancer.ingress[].ip})
+    - echo "PROD_IP=$PROD_IP" >> init.env
+    - echo $PROD_IP
+  artifacts:
+    reports:
+      dotenv: init.env
+  
+sanity ui PROD:
+  dependencies:
+    - prepare env PROD
+  variables:
+    URL_UI: $PROD_IP/$PROD_RELEASE/ui
+  image: curlimages/curl
+  stage: check prod
+  tags: [prod]
+  script:
+    - echo $PROD_IP
+    - >
+      curl -i ${URL_UI}/ | grep "HTTP/1.1 200 OK" && 
+      ( echo Helth Check OK = $URL_UI && exit 0; ) || ( echo Helth Check Failed Actuator=$URL_UI && exit 2; ) 
+
+sanity crawler PROD:
+  dependencies:
+    - prepare env PROD
+  variables:
+    URL_CRAWLER: $PROD_IP/$PROD_RELEASE/crawler
+  image: curlimages/curl
+  stage: check prod
+  tags: [prod]
+  script:
+    - echo $PROD_IP
+    - >
+      curl -i ${URL_CRAWLER} | grep "HTTP/1.1 200 OK" && 
+      ( echo Helth Check OK = $URL_CRAWLER && exit 0; ) || ( echo Helth Check Failed Actuator=$URL_CRAWLER && exit 2; )

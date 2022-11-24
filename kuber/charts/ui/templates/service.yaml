@@ -10,7 +10,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: {{ .Values.global.ui.service.externalPort }}
+  - name: ui
+    port: {{ .Values.global.ui.service.externalPort }}
     protocol: TCP
     targetPort: {{ .Values.global.ui.service.internalPort }}
   selector:

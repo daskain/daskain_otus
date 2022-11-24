@@ -27,6 +27,11 @@ kubectl create clusterrolebinding gitlab-admin --clusterrole=cluster-admin --gro
 echo "Create runner"
 helm upgrade --namespace default gitlab-runner -f values.yaml gitlab/gitlab-runner -i
 
+echo "Create monitoring"
+kubectl create namespace monitoring
+
+echo "Add serviceMonitor"
+
 #GET token
 token=$(kubectl -n kube-system get secrets -o json | \
 jq -r '.items[] | select(.metadata.name | startswith("gitlab-admin")) | .data.token' | \

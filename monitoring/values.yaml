@@ -1,0 +1,18 @@
+prometheus:
+  service:
+    type: LoadBalancer
+
+  # prometheusSpec:
+  #   podMonitorSelector:
+  #     matchLabels:
+  #       app: crawler-app
+  #       component: crawler
+  #   serviceMonitorSelector:
+  #     matchLabels:
+  #       app: crawler-app
+  #       component: crawler
+  prometheusSpec:
+    serviceMonitorSelector: 
+      matchLabels:
+        release: prometheus
+    serviceMonitorNamespaceSelector: {}
